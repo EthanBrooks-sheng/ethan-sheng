@@ -28,6 +28,20 @@
                 <h1>每个成功人士的背后都有一条脊椎</h1>
             </div>
         </header>
+
+        <section class="intro-section">
+            <h2 class="intro-title">始于...</h2>
+            
+            <div class="intro-content">
+                <div class="intro-image">
+                    <img src="..\images\best.jpg" alt="简介图片">
+                </div>
+                <div class="intro-text">
+                    <p>现在是2026年6月8日，是这个网站诞生之日。</p>
+                    <p>今年是我在大学的第二年，用这个网站记录我对生活的热爱和思考，此后每点进这个网站，也许往事就历历在目了。</p>
+                </div>
+            </div>
+        </section>
         
         <main class="grid-container">
             <section class="grid-item item-1">
@@ -48,5 +62,28 @@
             </section>
         </main>
         
+    <script>
+        // 1. 创建视口观察器
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show'); // 进入视口时贴上 .show 标签
+                    observer.unobserve(entry.target);   // 动画只执行一次，随后解除观察
+                }
+            });
+        }, {
+            threshold: 0.15 // 露出 15% 时触发
+        });
+
+        // 2. 获取这三个需要动画的元素
+        const introTitle = document.querySelector('.intro-title');
+        const introImage = document.querySelector('.intro-image');
+        const introText = document.querySelector('.intro-text');
+
+        // 3. 统一送进观察器（做个安全检查，防止页面找不到元素报错）
+        if (introTitle) observer.observe(introTitle);
+        if (introImage) observer.observe(introImage);
+        if (introText) observer.observe(introText);
+    </script>
     </body>
 </html>
