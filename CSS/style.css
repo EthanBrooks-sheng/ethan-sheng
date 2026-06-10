@@ -80,6 +80,7 @@ body {
 
 /* ==================== 网站简介部分 ==================== */
 .intro-section {
+    margin: 15px auto;
     padding: clamp(40px, 6vw, 80px) clamp(20px, 7vw, 140px);
     background-color: black;
 }
@@ -191,41 +192,145 @@ body {
 .grid-container {
     width: 100%;
     min-height: 100vh;
-
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-
-    gap: 15px;
+    gap: 15px; 
     padding: 15px;
-    background-color: #f4f4f9;
+    background-color: #ffffff;
 }
 
+/* 核心：卡片外壳 */
 .grid-item {
-    background-color: #ffffff;
+    position: relative;        /* 关键：作为绝对定位子元素的容器占位 */
+    overflow: hidden;          /* 关键：把超出卡片圆角的图片切掉 */
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-    border-radius: 12px;
+    justify-content: flex-start; /* 关键：让内容从卡片最顶部（上半部分）开始排列 */
+    padding: 40px;             /* 四周留出舒适的边距 */
+    
+    /* 动效过渡 */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
-.grid-item h2 {
-    margin-bottom: 15px;
-    color: #333;
+.item-1 {
+    background-color: #f5f5f6;
 }
 
-.grid-item p {
-    color: #333;
-    font-size: 15px;
+.item-2 {
+    background-color: aliceblue;
+}
+
+.item-3 {
+    background-color: aliceblue;
+}
+
+/* 核心：让图片绝对定位并完美铺满 */
+.card-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;         /* 关键：图片等比例缩放铺满，不变形 */
+    z-index: 1;                /* 放在最底层 */
+    transition: transform 0.5s ease; /* 为后面的悬停放大做准备 */
+}
+
+
+/* 核心：文字内容容器 */
+.card-content {
+    position: relative;
+    z-index: 3;                /* 保证文字在最上层，不被图片和遮罩挡住 */
+    text-align: left;          /* 杂志风通常靠左对齐，你也可以改成 center */
+}
+
+/* 文字颜色全部改为白色，在暗色背景下非常醒目 */
+.card-content h2 {
+    font-size: 42px;
+    color: #1d1d1f;
+    margin-bottom: 12px;
+    font-weight: 600;
     text-align: center;
+    margin-top: -10px;
+}
+
+.card-content p {
+    font-size: 16px;
+    color: rgba(13, 13, 13, 0.85); /* 稍微降低段落透明度，拉开视觉层级 */
     line-height: 1.6;
+    font-weight: 500;
+    text-align: center;
+    margin-top: -10px;
 }
 
 .grid-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* 当鼠标悬停在卡片上时，背景图片默默放大 1.05 倍，产生电影感 */
+.grid-item:hover .card-bg {
+    transform: scale(1.05);
+}
+
+/* ==================== 4. End 轮播部分 ==================== */
+.end-section {
+    width: 100%;
+    background-color: #000000; /* 深色背景更能衬托出图片的质感 */
+    padding: 60px 0;
+    overflow: hidden;         /* 关键：隐藏超出屏幕宽度的图片 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 标题 End 样式 */
+.end-title {
+    font-size: 48px;
+    background-color: #f8f9fa;
+    color: #000000;
+    text-align: center;
+    letter-spacing: 4px;
+    margin: 30px auto;
+    position: relative;
+}
+
+/* 轮播容器 */
+.carousel-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* 上下两列的间距 */
+}
+
+/* 图片长轨道 */
+.carousel-track {
+    display: flex;
+    gap: 20px;   /* 图片与图片之间的左右间距 */
+    width: max-content; /* 让轨道宽度由内容撑开，不换行 */
+    will-change: transform; 
+    /* 平滑过渡动画，让鼠标滚轮停止时有滑行感 */
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); 
+}
+
+/* 大图列的单张图片尺寸 */
+.track-large .carousel-item img {
+    width: 450px;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* 小图列的单张图片尺寸 */
+.track-small .carousel-item img {
+    width: 320px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* 初始给小图列稍微往左挪一点，错落有致 */
+.track-small {
+    transform: translateX(-850px);
 }
