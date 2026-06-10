@@ -44,46 +44,124 @@
         </section>
         
         <main class="grid-container">
+            
             <section class="grid-item item-1">
-                <h2>关于我</h2>
-                <p>你想知道的，都不在这里</p>
+                <img src="images/关于我.png" alt="关于我" class="card-bg">
+                <div class="card-overlay"></div>
+                <div class="card-content">
+                    <h2>关于我</h2>
+                    <p>你想知道的，都不在这里</p>
+                </div>
             </section>
+
             <section class="grid-item item-2">
-                <h2>文章</h2>
-                <p>我的一些记录</p>
+                <img src="images/文章.png" alt="文章" class="card-bg">
+                <div class="card-overlay"></div>
+                <div class="card-content">
+                    <h2>文章</h2>
+                    <p>我的一些记录</p>
+                </div>
             </section>
+
             <section class="grid-item item-3">
-                <h2>项目作品</h2>
-                <p>暂时还没有</p>
+                <img src="images/项目作品.png" alt="项目作品" class="card-bg">
+                <div class="card-overlay"></div>
+                <div class="card-content">
+                    <h2>项目作品</h2>
+                    <p>展示你的课设、GitHub 开源项目和硬核个人 Demo</p>
+                </div>
             </section>
+
             <section class="grid-item item-4">
-                <h2>你好</h2>
-                <p>一些我使用过的资源</p>
+                <img src="images/你好.png" alt="你好" class="card-bg">
+                <div class="card-overlay"></div>
+                <div class="card-content">
+                    <h2> 你好</h2>
+                    <p>摄影、电影、音乐，或者是捕捉生活美好的碎片。</p>
+                </div>
             </section>
+
         </main>
-        
-    <script>
-        // 1. 创建视口观察器
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('show'); // 进入视口时贴上 .show 标签
-                    observer.unobserve(entry.target);   // 动画只执行一次，随后解除观察
-                }
+        <div class="end-title"><h2>End</h2></div>
+        <section class="end-section">
+
+            <div class="carousel-container">
+                
+                <div class="carousel-track track-large" id="trackLarge">
+                    <div class="carousel-item"><img src="images/大图1.jpg" alt="大图1"></div>
+                    <div class="carousel-item"><img src="images/大图2.jpg" alt="大图2"></div>
+                    <div class="carousel-item"><img src="images/大图3.jpg" alt="大图3"></div>
+                    <div class="carousel-item"><img src="images/大图4.jpg" alt="大图4"></div>
+                    <div class="carousel-item"><img src="images/大图5.jpg" alt="大图5"></div>
+                    <div class="carousel-item"><img src="images/大图6.jpg" alt="大图6"></div>
+                </div>
+
+                <div class="carousel-track track-small" id="trackSmall">
+                    <div class="carousel-item"><img src="images/小图1.jpg" alt="小图1"></div>
+                    <div class="carousel-item"><img src="images/小图2.jpg" alt="小图2"></div>
+                    <div class="carousel-item"><img src="images/小图3.jpg" alt="小图3"></div>
+                    <div class="carousel-item"><img src="images/小图4.png" alt="小图4"></div>
+                    <div class="carousel-item"><img src="images/小图5.png" alt="小图5"></div>
+                    <div class="carousel-item"><img src="images/小图6.jpg" alt="小图6"></div>
+                    <div class="carousel-item"><img src="images/小图7.jpg" alt="小图7"></div>
+                    <div class="carousel-item"><img src="images/小图8.jpg" alt="小图8"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <script>
+            // 1. 创建视口观察器
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show'); // 进入视口时贴上 .show 标签
+                        observer.unobserve(entry.target);   // 动画只执行一次，随后解除观察
+                    }
+                });
+            }, {
+                threshold: 0.15 // 露出 15% 时触发
             });
-        }, {
-            threshold: 0.15 // 露出 15% 时触发
-        });
 
-        // 2. 获取这三个需要动画的元素
-        const introTitle = document.querySelector('.intro-title');
-        const introImage = document.querySelector('.intro-image');
-        const introText = document.querySelector('.intro-text');
+            // 2. 获取这三个需要动画的元素
+            const introTitle = document.querySelector('.intro-title');
+            const introImage = document.querySelector('.intro-image');
+            const introText = document.querySelector('.intro-text');
 
-        // 3. 统一送进观察器（做个安全检查，防止页面找不到元素报错）
-        if (introTitle) observer.observe(introTitle);
-        if (introImage) observer.observe(introImage);
-        if (introText) observer.observe(introText);
-    </script>
+            // 3. 统一送进观察器（做个安全检查，防止页面找不到元素报错）
+            if (introTitle) observer.observe(introTitle);
+            if (introImage) observer.observe(introImage);
+            if (introText) observer.observe(introText);
+
+            // ==================== 🌟 End 部分滚轮联动横移 ====================
+            const trackLarge = document.getElementById('trackLarge');
+            const trackSmall = document.getElementById('trackSmall');
+
+            // 记录当前平移的总距离
+            let scrollPosition = 0;
+            // 设置一个初始偏置量（因为小图列在CSS里初始移动了-150px）
+            let smallTrackOffset = -850; 
+
+            // 监听整个 End 区域的鼠标滚轮事件
+            document.querySelector('.end-section').addEventListener('wheel', (event) => {
+                // 核心安全阻止：防止滚轮把整个网页滑上去或滑下来
+                event.preventDefault();
+
+                // event.deltaY 会抓取你滚轮的力度（向下动是正数，向上动是负数）
+                // 乘以 0.6 是为了让滑动速度更柔和细腻
+                scrollPosition += event.deltaY * 0.6;
+
+                // 限制滑动的最大边界，防止图片全部滑出屏幕看白边
+                // 这里的数字（0 到 1200）可以根据你的图片总宽度自由微调
+                if (scrollPosition < 0) scrollPosition = 0;
+                if (scrollPosition > 1200) scrollPosition = 1200;
+
+                // 【大图列】往左滑（所以是负数）
+                trackLarge.style.transform = `translateX(${-scrollPosition}px)`;
+
+                // 【小图列】往右滑（交错反向滚动效果）
+                trackSmall.style.transform = `translateX(${smallTrackOffset + scrollPosition}px)`;
+            }, { passive: false }); // 必须加 passive: false 才能成功阻止网页默认上下滚动
+        </script>
     </body>
 </html>
