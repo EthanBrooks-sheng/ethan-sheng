@@ -57,134 +57,268 @@ body {
 }
 
 /* ==================== 首页大图部分 ==================== */
-/* 首页全屏大图 */
-.glass-card {
-    color: #ffffff;
-    font-size: 26px;
-    letter-spacing: 4px;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+.hero-container {
+    position: relative;
+    width: 100%;
+    height: 200vh; 
+    background-color: #ffffff;
 }
 
-.picture-section {
-    width: 100%;
-    height: calc(100vh - 70px);
+/* 初始顶部的文字 */
+.hero-initial-title {
+    position: fixed;
+    top: 10vh; /* 距离顶部一定距离 */
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 42px;
+    font-weight: 500;
+    color: #000000;
+    letter-spacing: 2px;
+    z-index: 10;
+    transition: opacity 0.3s ease; /* 方便后面滚轮滑下时淡出 */
+}
 
-    background: url("../images/background.jpg") no-repeat center center/cover;
-
+/* 图片外壳：通过 fixed 牢牢钉在屏幕上，直到动画结束 */
+.hero-image-wrapper {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* 📌 初始状态：占据屏幕中央的二分之一 */
+    width: 60vw;
+    height: 60vh;
+    border-radius: 24px; /* 初始带点精致的圆角 */
+    
+    overflow: hidden;
+    z-index: 5;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    
+    /* 让内部的最终文字可以用 flex 布局定位在左侧 */
     display: flex;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 8%;
+}
+
+/* 里面的大图：必须绝对定位并充满外壳 */
+.hero-zoom-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+/* 最终浮现在图片左侧的文字 */
+.hero-final-text {
+    position: relative;
+    z-index: 2; /* 压在图片上方 */
+    color: #ffffff;
+    text-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    
+    /* 📌 初始状态：透明且靠左隐藏 */
+    opacity: 0;
+    transform: translateX(-30px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.hero-final-text h2 {
+    font-size: 42px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.hero-final-text p {
+    font-size: 24px;
+    line-height: 1.8;
+    margin: 5px 0;
+}
+
+/* ==================== 3. 网站简介部分（去宽限制，右侧溢出屏幕） ==================== */
+.intro-section {
+    width: 100%;
+    margin: 120px auto;
+    padding: 0 0 96px;
+    display: flex;
+    flex-direction: column;
     align-items: center;
     position: relative;
-    overflow: hidden;
 }
 
-/* ==================== 网站简介部分 ==================== */
-.intro-section {
-    margin: 15px auto;
-    padding: clamp(40px, 6vw, 80px) clamp(20px, 7vw, 140px);
-    background-color: black;
+/* 👈 标题和段落文字：依然保持在网页核心的 1300px 框内，实现完美的左对齐 */
+.intro-title-wrapper, 
+.intro-text-wrapper {
+    width: 100%;
+    max-width: 1450px; 
+    padding: 0 24px;   
+    text-align: left;
+    margin-right: auto; 
+    margin-left: auto;
 }
 
 .intro-title {
-    font-size: clamp(30px, 4.2vw, 42px);
-    margin-bottom: clamp(24px, 3vw, 40px);
-    text-align: center;
-    position: relative;
-    color: white;
+    font-size: 48px;
+    color: #333;
+    margin-bottom: 40px;
+    display: inline-block;
 }
 
-.intro-content {
-    display: grid;
-    grid-template-columns: minmax(260px, 1fr) minmax(260px, 0.9fr);
-    gap: clamp(20px, 4vw, 50px);
-    align-items: center;
+.intro-text-wrapper {
+    margin-top: 15px;
+}
+.intro-text-wrapper p {
+    font-size: 24px;
+    font-weight: 500;
+    color: #6e6e72;
+    line-height: 1.5;
+    margin-bottom: 15px;
 }
 
-.intro-image {
-    min-width: 0;
+.intro-strong {
+    color: #000000;
 }
 
-.intro-image img {
-    width: 100%;
-    max-width: 560px;
-    margin: 0 auto;
-    display: block;
-    aspect-ratio: 4 / 3;
-    object-fit: cover;
-    border-radius: 12px;
-    filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.28));
-}
-
-.intro-text {
-    min-width: 0;
-    max-width: 70ch;  /* 控制单行最大字符数，避免“文字很长” */
-}
-
-.intro-text p {
-    font-size: clamp(16px, 1.5vw, 24px);
-    line-height: 1.9;
-    overflow-wrap: break-word;
-    color: white;
-}
-
-/* 平板及以下：单列布局，图片不会被压缩得太小 */
-@media (max-width: 980px) {
-    .intro-section {
-        padding: 48px clamp(18px, 5vw, 40px);
-    }
-
-    .intro-content {
-        grid-template-columns: 1fr;
-        gap: 22px;
-    }
-
-    .intro-image {
-        width: min(100%, 680px);
-        margin: 0 auto;
-    }
-
-    .intro-text {
-        max-width: 68ch;
-        margin: 0 auto;
-    }
-}
-
-/* 手机：进一步收紧文字和间距 */
-@media (max-width: 600px) {
-    .intro-section {
-        padding: 36px 16px;
-    }
-
-    .intro-text p {
-        font-size: 16px;
-        line-height: 1.8;
-    }
-}
-
-/* 1. 默认状态：标题、图片、文字全部初始透明，并向下位移 60px */
-.intro-title, .intro-image, .intro-text {
+/* 初始隐藏并准备自下而上渐显（由 JS 控制添加 .show 类触发） */
+.intro-title-wrapper,
+.intro-img-box,
+.intro-text-wrapper,
+.intro-text-wrapper p {
     opacity: 0;
-    transform: translateY(60px);
-    /* 1秒内平滑过渡 */
-    transition: opacity 1s ease, transform 1s ease; 
+    transform: translateY(36px);
+    transition: opacity 820ms cubic-bezier(0.22, 1, 0.36, 1), transform 820ms cubic-bezier(0.22, 1, 0.36, 1);
     will-change: opacity, transform;
 }
 
-/* 2. 激活状态：谁被加上了 .show，谁就恢复正常 */
-.intro-title.show, .intro-image.show, .intro-text.show {
+/* 显示态 */
+.show {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+/* 当文本容器被标记为 .show 时，允许其内部段落显现，并按序延迟 */
+.intro-text-wrapper.show p {
     opacity: 1;
     transform: translateY(0);
 }
+.intro-text-wrapper.show p:nth-of-type(1) { transition-delay: 120ms; }
+.intro-text-wrapper.show p:nth-of-type(2) { transition-delay: 240ms; }
 
-/* 3. 细节优化：让它们错开时间浮现，形成极佳的视觉先后顺序 */
-/* 标题最先浮现（默认 0 秒延迟） */
-
-.intro-image {
-    transition-delay: 0.15s; /* 图片比标题慢 0.15 秒 */
+.intro-controls {
+    position: absolute;
+    right: 204px;
+    bottom: 24px;
+    display: flex;
+    gap: 12px;
+    z-index: 5;
 }
 
-.intro-text {
-    transition-delay: 0.3s;  /* 文字比图片再慢 0.15 秒 */
+.intro-control-btn {
+    width: 46px;
+    height: 46px;
+    border: 1px solid rgba(255, 255, 255, 0.32);
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.14));
+    backdrop-filter: blur(18px) saturate(160%);
+    -webkit-backdrop-filter: blur(18px) saturate(160%);
+    color: rgba(17, 24, 39, 0.88);
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow:
+        0 12px 30px rgba(15, 23, 42, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.45),
+        0 0 0 1px rgba(255, 255, 255, 0.16),
+        0 0 14px rgba(255, 255, 255, 0.12);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+}
+
+.intro-control-btn:hover {
+    transform: translateY(-3px) scale(1.04);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.2));
+    border-color: rgba(255, 255, 255, 0.48);
+    box-shadow:
+        0 18px 36px rgba(15, 23, 42, 0.22),
+    inset 0 1px 0 rgba(255, 255, 255, 0.56),
+    0 0 0 1px rgba(255, 255, 255, 0.2),
+    0 0 18px rgba(255, 255, 255, 0.16);
+}
+
+.intro-control-btn:active {
+    transform: translateY(-1px) scale(1.01);
+}
+
+/* 👉 核心修改：图片外壳不再限制最大宽度！直接拉满到屏幕 100% 宽 */
+.intro-carousel-container {
+    width: 100%;               /* 撑满整个屏幕宽度 */
+    overflow-x: auto;          /* 开启水平滑动 */
+    overflow-y: hidden;        
+    white-space: nowrap;       
+    scrollbar-width: none;     
+    padding-bottom: 20px;      
+    
+    /* 📌 关键魔幻细节：左边内边距与文字的左对齐线对齐，右边不需要边距，让图片可以冲出屏幕 */
+    padding-left: calc((100% - 1450px) / 2 + 24px); 
+    padding-right: 24px;
+    box-sizing: border-box;    /* 确保内边距不撑坏布局 */
+}
+
+/* 如果屏幕小于 1100px（比如平板或手机），左边距自动降级为普通安全边距 */
+@media (max-width: 1100px) {
+    .intro-carousel-container {
+        padding-left: 24px;
+    }
+}
+
+.intro-carousel-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* 超长图片轨道 */
+.intro-carousel-track {
+    display: flex;
+    gap: 30px;                 /* 图片之间的左右间距 */
+    width: max-content;        
+    align-items: center;       
+}
+
+/* 单个图片盒子 */
+.intro-img-box {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    flex-shrink: 0;            /* 防止图片被压缩 */
+}
+.intro-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 📌 核心修改：去掉固定 px 宽度，改用屏幕视口单位（vw），让图片大幅度变大 */
+.type-vertical { 
+    width: 32vw;        /* 宽度占屏幕的 32% */
+    height: 600px;      /* 调高竖图高度，使其更有视觉压迫感 */
+}
+.type-horizontal { 
+    width: 45vw;        /* 宽度占屏幕的 45% */
+    height: 400px;      /* 调高横图高度 */
+}
+
+/* 如果在超大屏幕（如 2K 屏）上，防止图片无限变大，可以给 vw 设置一个最大 px 兜底（可选） */
+@media (min-width: 1600px) {
+    .type-vertical { width: 500px; }
+    .type-horizontal { width: 700px; }
+}
+
+@media (max-width: 1100px) {
+    .intro-controls {
+        right: 204px;
+        bottom: 20px;
+    }
 }
 
 /* ==================== 四个个人主要部分 ==================== */

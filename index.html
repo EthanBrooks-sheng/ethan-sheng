@@ -2,7 +2,7 @@
 <html>
     <head lang="zh-CN">
         <title>EthanBrooks-sheng的个人主页</title> 
-        <link rel="stylesheet" href="CSS/style.css">
+        <link rel="stylesheet" href="css/style.css">
         <!--标签栏图标-->
     </head>
     <body>
@@ -23,23 +23,50 @@
             </div>
         </nav>
 
-        <header class="picture-section">
-            <div class="glass-card">
-                <h1>每个成功人士的背后都有一条脊椎</h1>
+        <header class="hero-container" id="heroContainer">
+            <h1 class="hero-initial-title" id="initialTitle">After all, tomorrow is another day!</h1>
+            
+            <div class="hero-image-wrapper" id="heroWrapper">
+                <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920" alt="主题大图" class="hero-zoom-img">
+                
+                <div class="hero-final-text" id="finalText">
+                    <h2>Hello World</h2>
+                    <p>One is always on a strange road<br>watching strange scenery and listeningto strange music. </p>
+                    <p>Then one day<br>you will find that the things you tryhard to forget are already gone.</p>
+                </div>
             </div>
         </header>
 
         <section class="intro-section">
-            <h2 class="intro-title">始于...</h2>
+            <div class="intro-title-wrapper">
+                <h2 class="intro-title">Starting with...</h2>
+            </div>
             
-            <div class="intro-content">
-                <div class="intro-image">
-                    <img src="../images/best.jpg" alt="简介图片">
+            <div class="intro-controls" aria-label="图片左右控制">
+                <button class="intro-control-btn" id="introScrollLeft" type="button" aria-label="向左移动">‹</button>
+                <button class="intro-control-btn" id="introScrollRight" type="button" aria-label="向右移动">›</button>
+            </div>
+
+            <div class="intro-carousel-container">
+                <div class="intro-carousel-track">
+                    <div class="intro-img-box img-1 type-horizontal">
+                        <img src="images/yellow-mountain.jpg" alt="横图三">
+                    </div>
+                    <div class="intro-img-box img-2 type-horizontal">
+                        <img src="images/sky.jpg" alt="横图一">
+                    </div>
+                    <div class="intro-img-box img-3 type-horizontal">
+                        <img src="images/Idn.jpg" alt="横图四">
+                    </div>
+                    <div class="intro-img-box img-4 type-horizontal">
+                        <img src="images/best.jpg" alt="横图二">
+                    </div>
                 </div>
-                <div class="intro-text">
-                    <p>现在是2026年6月8日，是这个网站诞生之日。</p>
-                    <p>今年是我在大学的第二年，用这个网站记录我对生活的热爱和思考，此后每点进这个网站，也许往事就历历在目了。</p>
-                </div>
+            </div>
+
+            <div class="intro-text-wrapper">
+                <p><span class="intro-strong">Fate is like a hastily written book:</span> turn the pages too quickly, and you might miss something;<br> read it too intently, and you might be moved to tears.</p>
+                <p>Life was a box of chocolates,you never know what you're gonna get.</p>
             </div>
         </section>
         
@@ -68,7 +95,7 @@
                 <div class="card-overlay"></div>
                 <div class="card-content">
                     <h2>项目作品</h2>
-                    <p>展示你的课设、GitHub 开源项目和硬核个人 Demo</p>
+                    <p>课设、GitHub 开源项目和硬核个人 Demo</p>
                 </div>
             </section>
 
@@ -110,58 +137,6 @@
             </div>
         </section>
 
-        <script>
-            // 1. 创建视口观察器
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('show'); // 进入视口时贴上 .show 标签
-                        observer.unobserve(entry.target);   // 动画只执行一次，随后解除观察
-                    }
-                });
-            }, {
-                threshold: 0.15 // 露出 15% 时触发
-            });
-
-            // 2. 获取这三个需要动画的元素
-            const introTitle = document.querySelector('.intro-title');
-            const introImage = document.querySelector('.intro-image');
-            const introText = document.querySelector('.intro-text');
-
-            // 3. 统一送进观察器（做个安全检查，防止页面找不到元素报错）
-            if (introTitle) observer.observe(introTitle);
-            if (introImage) observer.observe(introImage);
-            if (introText) observer.observe(introText);
-
-            // ==================== 🌟 End 部分滚轮联动横移 ====================
-            const trackLarge = document.getElementById('trackLarge');
-            const trackSmall = document.getElementById('trackSmall');
-
-            // 记录当前平移的总距离
-            let scrollPosition = 0;
-            // 设置一个初始偏置量（因为小图列在CSS里初始移动了-150px）
-            let smallTrackOffset = -850; 
-
-            // 监听整个 End 区域的鼠标滚轮事件
-            document.querySelector('.end-section').addEventListener('wheel', (event) => {
-                // 核心安全阻止：防止滚轮把整个网页滑上去或滑下来
-                event.preventDefault();
-
-                // event.deltaY 会抓取你滚轮的力度（向下动是正数，向上动是负数）
-                // 乘以 0.6 是为了让滑动速度更柔和细腻
-                scrollPosition += event.deltaY * 0.6;
-
-                // 限制滑动的最大边界，防止图片全部滑出屏幕看白边
-                // 这里的数字（0 到 1200）可以根据你的图片总宽度自由微调
-                if (scrollPosition < 0) scrollPosition = 0;
-                if (scrollPosition > 1200) scrollPosition = 1200;
-
-                // 【大图列】往左滑（所以是负数）
-                trackLarge.style.transform = `translateX(${-scrollPosition}px)`;
-
-                // 【小图列】往右滑（交错反向滚动效果）
-                trackSmall.style.transform = `translateX(${smallTrackOffset + scrollPosition}px)`;
-            }, { passive: false }); // 必须加 passive: false 才能成功阻止网页默认上下滚动
-        </script>
+        <script src="js/main.js"></script>
     </body>
 </html>
